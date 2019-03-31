@@ -3,6 +3,7 @@ package com.machucalos.quicksell;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -22,14 +26,17 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     static final int CREATE_CUSTOM_ITEM_REQUEST = 1;
     private CustomAdapter customAdapter;
+    private ArrayList<CustomItem> itemsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ListView listView = findViewById(R.id.main_listview);
-        ArrayList<CustomItem> itemsList = new ArrayList<CustomItem>();
-         customAdapter = new CustomAdapter(this,itemsList );
+
+        itemsList =loadCustomArray();
+        customAdapter = new CustomAdapter(this,itemsList );
+
         listView.setAdapter(customAdapter);
         FloatingActionButton floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +51,26 @@ public class MainActivity extends AppCompatActivity {
     public  static class ViewHolder{
         public TextView name;
     }
+    private ArrayList<CustomItem>  loadCustomArray(){
+         SharedPreferences sharedPreferences = getSharedPreferences("items", MODE_PRIVATE);
+         String json = sharedPreferences.getString("array", null);
+         if(json  == null) return  new ArrayList<CustomItem>();
+         Gson gson = new Gson();
 
+         return gson.fromJson(json,new TypeToken<ArrayList<CustomItem>>(){
+
+         }.getType());
+
+    }
+    private void saveCustomArray(ArrayList<CustomItem> items ){
+        SharedPreferences sharedPreferences = getSharedPreferences("items", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(items);
+        editor.putString("array",json);
+        editor.apply();
+
+    }
 
     private class CustomAdapter extends ArrayAdapter<CustomItem> {
 
@@ -104,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK && requestCode == 1 && data != null){
             CustomItem customItem = data.getParcelableExtra("item");
             customAdapter.add(customItem);
+            saveCustomArray(itemsList);
+
         }
 
     }
