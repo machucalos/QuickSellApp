@@ -8,33 +8,26 @@ import java.math.BigDecimal;
 public class CustomItem implements Parcelable {
     private String name;
     private String serial_id;
-    private double amount;
 
-    CustomItem(String name, String serial_id, double value) {
+    public CustomItem(String name, String serial_id, String size, double amount) {
         this.name = name;
         this.serial_id = serial_id;
-        this.amount = value;
+        this.size = size;
+        this.amount = amount;
     }
+
+    private String size;
+    private double amount;
+
 
     protected CustomItem(Parcel in) {
         name = in.readString();
         serial_id = in.readString();
+        size = in.readString();
         amount = in.readDouble();
     }
 
-    public static final Creator<CustomItem> CREATOR = new Creator<CustomItem>() {
-        @Override
-        public CustomItem createFromParcel(Parcel in) {
-            return new CustomItem(in);
-        }
-
-        @Override
-        public CustomItem[] newArray(int size) {
-            return new CustomItem[size];
-        }
-    };
-
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -50,13 +43,35 @@ public class CustomItem implements Parcelable {
         this.serial_id = serial_id;
     }
 
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double value) {
-        this.amount = value;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
+
+    public static final Creator<CustomItem> CREATOR = new Creator<CustomItem>() {
+        @Override
+        public CustomItem createFromParcel(Parcel in) {
+            return new CustomItem(in);
+        }
+
+        @Override
+        public CustomItem[] newArray(int size) {
+            return new CustomItem[size];
+        }
+    };
+
+
 
     @Override
     public int describeContents() {
@@ -67,6 +82,8 @@ public class CustomItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(serial_id);
+        dest.writeString(size);
         dest.writeDouble(amount);
+
     }
 }

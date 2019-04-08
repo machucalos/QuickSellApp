@@ -12,9 +12,11 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="8dp"
+        android:autoText="false"
         android:text="Name"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:autoSizeTextType="uniform"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,8 +40,19 @@
         app:layout_constraintBottom_toBottomOf="@+id/serial_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/name_textView"
+        app:layout_constraintTop_toBottomOf="@+id/size_textView"
         app:layout_constraintVertical_bias="0.95" />
+
+    <TextView
+        android:id="@+id/size_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+
+        android:layout_marginTop="8dp"
+        android:text="Size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/deletebtn"

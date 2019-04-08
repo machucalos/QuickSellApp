@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class CustomItemActivity extends AppCompatActivity {
-    TextView name_editText, serial_editText, amount_editText;
+    TextView name_editText, serial_editText, size_editText, amount_editText;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +28,12 @@ public class CustomItemActivity extends AppCompatActivity {
         CustomItem item = intent.getParcelableExtra("item");
         name_editText = findViewById(R.id.name_editText);
         serial_editText = findViewById(R.id.serial_editText);
+        size_editText = findViewById(R.id.size_editText);
         amount_editText = findViewById(R.id.amount_editText);
 
         name_editText.setText(item.getName());
         serial_editText.setText(item.getSerial_id());
+        size_editText.setText(item.getSize());
         amount_editText.setText(String.valueOf(item.getAmount()));
 
         Button createItemButton = findViewById(R.id.button);
@@ -88,7 +90,7 @@ public class CustomItemActivity extends AppCompatActivity {
 
     private void sendResult(){
         Intent intent = new Intent(CustomItemActivity.this, MainActivity.class);
-        CustomItem item = new CustomItem(name_editText.getText().toString(), serial_editText.getText().toString(),Double.parseDouble(amount_editText.getText().toString()));
+        CustomItem item = new CustomItem(name_editText.getText().toString(), serial_editText.getText().toString(),size_editText.getText().toString(), Double.parseDouble(amount_editText.getText().toString()));
         intent.putExtra("item", item);
         setResult(Activity.RESULT_OK, intent);
         finish();
